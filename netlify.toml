@@ -1,0 +1,18 @@
+# Netlify config for the Talent Acquisition candidate tracker.
+# Only ./public is served publicly; the function source and this config stay out of the web root.
+[build]
+  publish   = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+# The tracker holds candidate PII — never let it be cached by shared/CDN caches,
+# and don't allow it to be framed by other sites.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control          = "no-store"
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "no-referrer"
